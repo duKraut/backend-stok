@@ -14,46 +14,33 @@ import io.quarkus.panache.common.Sort;
 public class SupplierResource {
 
     @Inject
-    SupplierRepository repository;
+    SupplierService service;
 
     @GET
     public List<Supplier> list() {
-        return repository.listAll(Sort.by("createdAt").descending());
+        return service.list();
     }
 
     @GET
     @Path("/{id}")
     public Supplier findById(@PathParam("id") UUID id) {
-        return repository.findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado"));
+        return service.findById(id);
     }
 
     @POST
-    @Transactional
     public Supplier create(Supplier supplier) {
-        repository.persist(supplier);
-        return supplier;
+        return service.create(supplier);
     }
 
     @PUT
     @Path("/{id}")
-    @Transactional
     public Supplier update(@PathParam("id") UUID id, Supplier data) {
-        Supplier supplier = findById(id);
-
-        supplier.name = data.name;
-        supplier.document = data.document;
-        supplier.category = data.category;
-        supplier.active = data.active;
-
-        return supplier;
+        return service.update(id, data);
     }
 
     @DELETE
     @Path("/{id}")
-    @Transactional
     public void delete(@PathParam("id") UUID id) {
-        Supplier supplier = findById(id);
-        supplier.active = false;
+        service.deactivate(id);
     }
 }

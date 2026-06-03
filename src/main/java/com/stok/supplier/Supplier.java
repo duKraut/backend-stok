@@ -26,10 +26,10 @@ public class Supplier extends PanacheEntityBase {
 
     public Boolean active = true;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     public LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(name = "updated_at", nullable = false)
     public LocalDateTime updatedAt;
 
     @PrePersist
