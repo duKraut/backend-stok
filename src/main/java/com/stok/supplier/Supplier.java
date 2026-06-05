@@ -24,6 +24,25 @@ public class Supplier extends PanacheEntityBase {
 
     public String category;
 
+    @Column(name = "person_type", nullable = false)
+    public String personType;
+
+    @Column(name = "contact_name")
+    public String contactName;
+
+    public String email;
+
+    public String phone;
+
+    public String address;
+
+    @Column(name = "zip_code")
+    public String zipCode;
+
+    public String city;
+
+    public String neighborhood;
+
     public Boolean active = true;
 
     @Column(name = "created_at", nullable = false, updatable = false)
