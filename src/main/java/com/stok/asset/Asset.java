@@ -3,7 +3,8 @@ package com.stok.asset;
 import com.stok.supplier.Supplier;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
-
+import java.math.RoundingMode;
+import java.time.temporal.ChronoUnit;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -91,6 +92,45 @@ public class Asset extends PanacheEntityBase {
 
     @Column(name = "updated_at", nullable = false)
     public LocalDateTime updatedAt;
+
+    public BigDecimal getCurrentValue() {
+        if (acquisitionValue == null || acquisitionDate == null
+                || usefulLifeYears == null || usefulLifeYears <= 0
+                || depreciationMethod == null) {
+            return acquisitionValue;
+        }
+
+        BigDecimal residual = residualValue != null ? residualValue : BigDecimal.ZERO;
+        long yearsElapsed = ChronoUnit.YEARS.between(acquisitionDate, LocalDate.now());
+
+        if (yearsElapsed <= 0) return acquisitionValue;
+        if (yearsElapsed >= usefulLifeYears) return residual;
+
+        return switch (depreciationMethod) {
+
+            case LINEAR -> {
+                BigDecimal annual = acquisitionValue.subtract(residual)
+                        .divide(BigDecimal.valueOf(usefulLifeYears), 10, RoundingMode.HALF_UP);
+                yield acquisitionValue.subtract(annual.multiply(BigDecimal.valueOf(yearsElapsed)))
+                        .max(residual).setScale(2, RoundingMode.HALF_UP);
+            }
+
+            case SOMA_DIGITOS -> {
+                long syd = (long) usefulLifeYears * (usefulLifeYears + 1) / 2;
+                BigDecimal depreciable = acquisitionValue.subtract(residual);
+                BigDecimal accumulated = BigDecimal.ZERO;
+                for (int y = 1; y <= yearsElapsed; y++) {
+                    BigDecimal factor = BigDecimal.valueOf(usefulLifeYears - y + 1)
+                            .divide(BigDecimal.valueOf(syd), 10, RoundingMode.HALF_UP);
+                    accumulated = accumulated.add(depreciable.multiply(factor));
+                }
+                yield acquisitionValue.subtract(accumulated).max(residual)
+                        .setScale(2, RoundingMode.HALF_UP);
+            }
+
+            default -> acquisitionValue;
+        };
+    }
 
     @PrePersist
     public void prePersist() {
