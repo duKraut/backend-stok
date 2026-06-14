@@ -1,13 +1,16 @@
 package com.stok.supplier;
 
+import com.stok.auth.SecurityCheck;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 import java.util.UUID;
-import io.quarkus.panache.common.Sort;
-import jakarta.ws.rs.core.Response;
 
 @Path("/suppliers")
 @Produces(MediaType.APPLICATION_JSON)
@@ -16,22 +19,27 @@ public class SupplierResource {
 
     public record ErrorResponse(String message) {}
 
-    @Inject
-    SupplierService service;
+    @Inject SupplierService service;
+    @Inject SecurityCheck security;
+    @Context ContainerRequestContext ctx;
 
     @GET
     public List<Supplier> list() {
+        security.requireModule("FORNECEDORES", ctx);
         return service.list();
     }
 
     @GET
     @Path("/{id}")
     public Supplier findById(@PathParam("id") UUID id) {
+        security.requireModule("FORNECEDORES", ctx);
         return service.findById(id);
     }
 
     @POST
     public Response create(Supplier supplier) {
+        security.requireModule("FORNECEDORES", ctx);
+        security.requireEdit(ctx);
         try {
             return Response.ok(service.create(supplier)).build();
         } catch (IllegalArgumentException e) {
@@ -45,6 +53,8 @@ public class SupplierResource {
     @PUT
     @Path("/{id}")
     public Response update(@PathParam("id") UUID id, Supplier data) {
+        security.requireModule("FORNECEDORES", ctx);
+        security.requireEdit(ctx);
         try {
             return Response.ok(service.update(id, data)).build();
         } catch (IllegalArgumentException e) {
@@ -55,13 +65,15 @@ public class SupplierResource {
         }
     }
 
-    private boolean isDuplicateError(IllegalArgumentException e) {
-        return e.getMessage() != null && e.getMessage().contains("CPF/CNPJ");
-    }
-
     @DELETE
     @Path("/{id}")
     public void delete(@PathParam("id") UUID id) {
+        security.requireModule("FORNECEDORES", ctx);
+        security.requireDelete(ctx);
         service.deactivate(id);
+    }
+
+    private boolean isDuplicateError(IllegalArgumentException e) {
+        return e.getMessage() != null && e.getMessage().contains("CPF/CNPJ");
     }
 }
