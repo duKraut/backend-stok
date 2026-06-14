@@ -2,6 +2,7 @@ package com.stok.user;
 
 import com.stok.auth.SecurityCheck;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
@@ -17,8 +18,10 @@ import java.util.UUID;
 public class UserResource {
 
     public record ErrorResponse(String message) {}
+    public record UserSummary(String id, String fullName) {}
 
     @Inject UserService service;
+    @Inject UserRepository repository;
     @Inject SecurityCheck security;
     @Context ContainerRequestContext ctx;
 
@@ -26,6 +29,15 @@ public class UserResource {
     public List<UserResponse> list() {
         security.requireAdmin(ctx);
         return service.list();
+    }
+
+    @GET
+    @Path("/active")
+    @Transactional(Transactional.TxType.SUPPORTS)
+    public List<UserSummary> listActive() {
+        return repository.find("active = true order by fullName asc").stream()
+                .map(u -> new UserSummary(u.id.toString(), u.fullName))
+                .toList();
     }
 
     @GET
