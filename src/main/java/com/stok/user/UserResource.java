@@ -78,6 +78,21 @@ public class UserResource {
         }
     }
 
+    @PUT
+    @Path("/me")
+    public Response updateSelf(UpdateSelfRequest req) {
+        try {
+            UUID userId = UUID.fromString((String) ctx.getProperty("jwt_userId"));
+            return Response.ok(service.updateSelf(userId, req)).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(new ErrorResponse(e.getMessage())).build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorResponse(e.getMessage())).build();
+        }
+    }
+
     @DELETE
     @Path("/{id}")
     public Response deactivate(@PathParam("id") UUID id) {

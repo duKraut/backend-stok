@@ -93,6 +93,28 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public UserResponse updateSelf(UUID userId, UpdateSelfRequest req) {
+        User user = repository.findByIdOptional(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (req.email != null && !req.email.isBlank() && !req.email.equals(user.email)) {
+            repository.findByEmail(req.email).ifPresent(existing -> {
+                if (!existing.id.equals(userId))
+                    throw new IllegalArgumentException("E-mail já cadastrado.");
+            });
+            user.email = req.email;
+        }
+
+        if (req.newPassword != null && !req.newPassword.isBlank()) {
+            if (req.currentPassword == null || !BCrypt.checkpw(req.currentPassword, user.passwordHash))
+                throw new IllegalArgumentException("Senha atual incorreta.");
+            user.passwordHash = BCrypt.hashpw(req.newPassword, BCrypt.gensalt(10));
+        }
+
+        return UserResponse.from(user, getModules(userId));
+    }
+
     private void persistModules(User user, List<String> modules) {
         if (modules == null) return;
         for (String module : modules) {
