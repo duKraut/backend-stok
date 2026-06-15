@@ -84,8 +84,8 @@ resend.from.email=onboarding@resend.dev
 ### 1. Clone o repositório
 
 ```bash
-git clone <url-do-repositorio>
-cd <pasta-do-projeto>
+git clone https://github.com/duKraut/backend-stok.git
+cd backend-stok
 ```
 
 ### 2. Modo desenvolvimento (com hot reload)
