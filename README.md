@@ -81,7 +81,14 @@ resend.from.email=onboarding@resend.dev
 
 ## Como rodar
 
-### Modo desenvolvimento (com hot reload)
+### 1. Clone o repositório
+
+```bash
+git clone <url-do-repositorio>
+cd <pasta-do-projeto>
+```
+
+### 2. Modo desenvolvimento (com hot reload)
 
 ```bash
 ./mvnw quarkus:dev
