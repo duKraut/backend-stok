@@ -29,13 +29,13 @@ VALUES
 
   ('b1000000-0000-0000-0000-000000000002',
    'Servidor', 'Dell', 'PowerEdge R750', 'SN-PE750-001', 'Informática',
-   'EXCELENTE', 'TI', 'Sala de Servidores', 'Administrador',
+   'MANUTENCAO', 'TI', 'Sala de Servidores', 'Administrador',
    '2024-01-10', 38500.00, 'a1000000-0000-0000-0000-000000000001',
    '2027-01-10', 10, 10.00, 'LINEAR', TRUE, NOW(), NOW()),
 
   ('b1000000-0000-0000-0000-000000000003',
    'Câmera IP', 'Intelbras', 'VIP 1130 B', 'SN-INT1130-001', 'Segurança',
-   'BOM', 'TI', 'Corredor Principal', 'Administrador',
+   'MANUTENCAO', 'TI', 'Corredor Principal', 'Administrador',
    '2023-08-20', 620.00, 'a1000000-0000-0000-0000-000000000001',
    '2025-08-20', 5, 20.00, 'LINEAR', TRUE, NOW(), NOW()),
 
@@ -47,13 +47,13 @@ VALUES
 
   ('b1000000-0000-0000-0000-000000000005',
    'Telefone IP', 'Cisco', '7841', 'SN-CS7841-001', 'Telefonia',
-   'BOM', 'RH', 'Recepção', 'Administrador',
+   'SUBSTITUIR', 'RH', 'Recepção', 'Administrador',
    '2022-11-05', 890.00, 'a1000000-0000-0000-0000-000000000001',
    '2024-11-05', 5, 20.00, 'LINEAR', TRUE, NOW(), NOW()),
 
   ('b1000000-0000-0000-0000-000000000006',
    'Projetor', 'Epson', 'PowerLite X49', 'SN-EPX49-001', 'Audiovisual',
-   'EXCELENTE', 'Diretoria', 'Sala de Reunião', 'Administrador',
+   'EXCELENTE', 'Secretaria', 'Sala de Reunião', 'Administrador',
    '2024-02-20', 3200.00, 'a1000000-0000-0000-0000-000000000001',
    '2027-02-20', 5, 20.00, 'LINEAR', TRUE, NOW(), NOW()),
 
@@ -77,7 +77,7 @@ VALUES
 
   ('b1000000-0000-0000-0000-000000000010',
    'Cadeira Ergonômica', 'Flexform', 'Presidente Plus', 'SN-FFP-001', 'Mobiliário',
-   'EXCELENTE', 'RH', 'Sala de RH', 'Administrador',
+   'EXCELENTE', 'Diretoria', 'Sala da Diretoria', 'Administrador',
    '2025-02-14', 980.00, 'a1000000-0000-0000-0000-000000000002',
    '2028-02-14', 10, 10.00, 'LINEAR', TRUE, NOW(), NOW()),
 
@@ -185,6 +185,68 @@ VALUES (
   '2026-04-18',
   'Manutenção preventiva anual com substituição de baterias.',
   'PREVENTIVA', 'APC Service Center', '2026-04-18', '2026-04-25', 420.00,
+  FALSE, NOW()
+);
+
+INSERT INTO asset_movements (id, asset_id, type, from_department, to_department, responsible, date, observations, decommission, created_at)
+VALUES (
+  'c1000000-0000-0000-0000-000000000010',
+  'b1000000-0000-0000-0000-000000000006',
+  'TRANSFERENCIA', 'Diretoria', 'Secretaria', 'Administrador',
+  '2026-06-02',
+  'Remanejamento do projetor para atender à demanda de apresentações do setor.',
+  FALSE, NOW()
+);
+
+INSERT INTO asset_movements (id, asset_id, type, from_department, responsible, date, observations, maintenance_type, service_provider, send_date, expected_return_date, estimated_cost, decommission, created_at)
+VALUES (
+  'c1000000-0000-0000-0000-000000000011',
+  'b1000000-0000-0000-0000-000000000003',
+  'MANUTENCAO', 'TI', 'Administrador',
+  '2026-06-11',
+  'Falha intermitente na captação de imagem. Encaminhado para reparo corretivo.',
+  'CORRETIVA', 'Intelbras Service Center', '2026-06-11', '2026-06-25', 280.00,
+  FALSE, NOW()
+);
+
+INSERT INTO asset_movements (id, asset_id, type, from_department, responsible, date, observations, new_conservation_status, decommission, created_at)
+VALUES (
+  'c1000000-0000-0000-0000-000000000012',
+  'b1000000-0000-0000-0000-000000000005',
+  'ESTADO', 'RH', 'Administrador',
+  '2026-06-16',
+  'Equipamento com mais de 4 anos de uso. Protocolo VoIP obsoleto e sem suporte do fabricante.',
+  'SUBSTITUIR', FALSE, NOW()
+);
+
+INSERT INTO asset_movements (id, asset_id, type, from_department, responsible, date, observations, new_conservation_status, decommission, created_at)
+VALUES (
+  'c1000000-0000-0000-0000-000000000013',
+  'b1000000-0000-0000-0000-000000000012',
+  'ESTADO', 'TI', 'Administrador',
+  '2026-06-03',
+  'Retorno de manutenção aprovado. Nobreak em pleno funcionamento.',
+  'EXCELENTE', FALSE, NOW()
+);
+
+INSERT INTO asset_movements (id, asset_id, type, from_department, to_department, responsible, date, observations, decommission, created_at)
+VALUES (
+  'c1000000-0000-0000-0000-000000000014',
+  'b1000000-0000-0000-0000-000000000010',
+  'TRANSFERENCIA', 'RH', 'Diretoria', 'Administrador',
+  '2026-06-09',
+  'Remanejamento para a Diretoria durante período de reuniões do conselho.',
+  FALSE, NOW()
+);
+
+INSERT INTO asset_movements (id, asset_id, type, from_department, responsible, date, observations, maintenance_type, service_provider, send_date, expected_return_date, estimated_cost, decommission, created_at)
+VALUES (
+  'c1000000-0000-0000-0000-000000000015',
+  'b1000000-0000-0000-0000-000000000002',
+  'MANUTENCAO', 'TI', 'Administrador',
+  '2026-06-18',
+  'Manutenção preventiva semestral com atualização de firmware e limpeza interna.',
+  'PREVENTIVA', 'Dell Service Center', '2026-06-18', '2026-06-30', 850.00,
   FALSE, NOW()
 );
 
