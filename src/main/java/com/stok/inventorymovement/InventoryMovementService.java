@@ -19,7 +19,7 @@ public class InventoryMovementService {
     InventoryRepository itemRepository;
 
     public List<InventoryMovement> list() {
-        return repository.find("order by date desc, createdAt desc").list();
+        return repository.find("order by codigo desc").list();
     }
 
     public List<InventoryMovement> listByItem(UUID itemId) {

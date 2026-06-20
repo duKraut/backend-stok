@@ -20,7 +20,7 @@ public class AssetMovementService {
     AssetRepository assetRepository;
 
     public List<AssetMovement> list() {
-        return repository.find("order by date desc, createdAt desc").list();
+        return repository.find("order by codigo desc").list();
     }
 
     public List<AssetMovement> listByAsset(UUID assetId) {

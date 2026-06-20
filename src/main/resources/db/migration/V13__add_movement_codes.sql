@@ -1,0 +1,2 @@
+ALTER TABLE asset_movements ADD COLUMN codigo BIGSERIAL UNIQUE;
+ALTER TABLE inventory_movements ADD COLUMN codigo BIGSERIAL UNIQUE;

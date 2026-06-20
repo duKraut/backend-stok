@@ -3,6 +3,8 @@ package com.stok.inventorymovement;
 import com.stok.inventory.Inventory;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,6 +18,10 @@ public class InventoryMovement extends PanacheEntityBase {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     public UUID id;
+
+    @Generated(event = EventType.INSERT)
+    @Column(nullable = false, unique = true, insertable = false, updatable = false)
+    public long codigo;
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)

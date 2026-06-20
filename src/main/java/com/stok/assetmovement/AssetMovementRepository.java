@@ -10,6 +10,6 @@ import java.util.UUID;
 public class AssetMovementRepository implements PanacheRepositoryBase<AssetMovement, UUID> {
 
     public List<AssetMovement> findByAssetId(UUID assetId) {
-        return find("asset.id = ?1 order by date desc, createdAt desc", assetId).list();
+        return find("asset.id = ?1 order by codigo desc", assetId).list();
     }
 }

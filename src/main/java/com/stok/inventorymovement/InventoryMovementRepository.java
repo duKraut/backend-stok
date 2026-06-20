@@ -10,6 +10,6 @@ import java.util.UUID;
 public class InventoryMovementRepository implements PanacheRepositoryBase<InventoryMovement, UUID> {
 
     public List<InventoryMovement> findByItemId(UUID itemId) {
-        return find("item.id = ?1 order by date desc, createdAt desc", itemId).list();
+        return find("item.id = ?1 order by codigo desc", itemId).list();
     }
 }

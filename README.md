@@ -45,7 +45,7 @@ GRANT ALL PRIVILEGES ON DATABASE stok_db TO stok;
 \q
 ```
 
-> As tabelas são criadas automaticamente pelo **Flyway** ao iniciar a aplicação (migrações V1 a V13, incluindo dados de seed).
+> As tabelas são criadas automaticamente pelo **Flyway** ao iniciar a aplicação (migrações V1 a V14, incluindo dados de seed).
 
 ---
 
@@ -216,7 +216,7 @@ src/main/java/com/stok/
 
 src/main/resources/
 ├── application.properties
-└── db/migration/   # Migrações Flyway (V1–V13)
+└── db/migration/   # Migrações Flyway (V1–V14)
 ```
 
 ---
@@ -237,7 +237,8 @@ As migrações são aplicadas automaticamente pelo Flyway ao iniciar a aplicaç�
 | V10 | Criação da tabela `inventory_movements` |
 | V11 | Criação da tabela `users` |
 | V12 | Criação da tabela `password_reset_tokens` |
-| V13 | Dados de seed (fornecedores, bens, estoque e movimentações de exemplo) |
+| V13 | Adição de código sequencial (`BIGSERIAL`) nas movimentações de patrimônio e estoque |
+| V14 | Dados de seed (fornecedores, bens, estoque e movimentações de exemplo) |
 
 ---
 
